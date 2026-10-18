@@ -2,8 +2,8 @@
 
 A Sapiens mod by **Vittorio**. Private repository owner: **VittorioJ85**.
 
-The installable mod is in `SplitLogFloor45/`. See its existing README and compatibility
-notices. The internal folder name is preserved; packaged installation folder:
+The installable mod is in `Structures Plus/`. See its existing README and compatibility
+notices. The source folder matches the installed mod folder; packaged installation folder:
 `Structures Plus`.
 
 ## Checks and packaging

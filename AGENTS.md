@@ -14,6 +14,8 @@
 
 ## Mod author and language
 
+- The current mod source folder is `Structures Plus`. `SplitLogFloor45` is a historical folder name. Use the current path for builds, tests and packaging; preserve runtime object identifiers and historical records.
+
 - For every mod created for this project, set the developer/author to `Vittorio` in its metadata and author credits.
 - Write all mod content and descriptions in English, including user-facing text, names, tooltips, documentation, and release descriptions.
 

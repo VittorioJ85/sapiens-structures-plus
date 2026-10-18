@@ -102,8 +102,8 @@ providers should use material registration or the documented adapter API.
 From the workspace root:
 
 ```text
-python model_assets.py SplitLogFloor45
-python model_assets.py SplitLogFloor45 --apply
+python model_assets.py "Structures Plus"
+python model_assets.py "Structures Plus" --apply
 ```
 
 The first command reports proposed consolidation. The second writes both the

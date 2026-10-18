@@ -4,7 +4,7 @@ Author: Vittorio. Runtime: Sapiens 0.7.0.2, Lua 5.1. User-facing mod text is Eng
 
 ## Source and installed layout
 
-The authoring directory remains `SplitLogFloor45` for compatibility with local tooling. Install it as `Structures Plus` in the Sapiens mods directory. Do not enable a second copy under the old name. Pools are integrated from version 0.11.0; do not load the legacy standalone Pool Prototype as well. Its workspace source remains a historical comparison fixture and is not deployed.
+The authoring directory is `Structures Plus`, matching the installed mod folder. Local build, test and packaging tools use this source path. Install it as `Structures Plus` in the Sapiens mods directory. Do not enable a second copy under the old name. Pools are integrated from version 0.11.0; do not load the legacy standalone Pool Prototype as well. Its workspace source remains a historical comparison fixture and is not deployed.
 
 ## Runtime architecture
 

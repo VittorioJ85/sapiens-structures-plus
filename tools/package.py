@@ -26,7 +26,7 @@ def main():
     for name, data in snapshot.items():
         if name.endswith('.json'):
             json.loads(data)
-    if CONFIG['source'] == 'SplitLogFloor45':
+    if CONFIG['source'] == 'Structures Plus':
         sys.path.insert(0, str(ROOT))
         from model_assets import consolidate
         report = consolidate(SOURCE)  # Read-only: never normalize published assets here.
