@@ -1,0 +1,1 @@
+{"version":"0.7.1","families":["Split Log","Mud Brick","Tile"],"legSizesMeters":[4,2],"apexDegrees":90,"baseAnglesDegrees":[45,45],"hypotenuseMeters":[5.656854249492381,2.8284271247461903],"edgeCenterSnapsPerSize":3,"angleLabels":"ASCII Grad","luaAndGeometryTests":"passed","fourMeterInGameVerifiedByUser":true,"twoMeterInGameVerified":false}
