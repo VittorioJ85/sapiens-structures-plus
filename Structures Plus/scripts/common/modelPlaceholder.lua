@@ -71,7 +71,19 @@ function mod:onload(placeholders)
             self:addModel(cfg.key.."_low",definitions)
         end
         for _, family in ipairs(families) do
-            if family.kind == "column" then
+            if family.kind=="windowInsert" then
+                for _,cfg in ipairs(mjrequire(family.configs)) do
+                    mjrequire("common/spWindowInsertUtils").placeholders(self,model,gameObject,cfg)
+                end
+            elseif family.configs == "common/spShapedFoundations" then
+                for _,cfg in ipairs(mjrequire(family.configs)) do
+                    mjrequire("common/spShapedFoundationUtils").placeholders(self,model,gameObject,cfg)
+                end
+            elseif family.kind == "door" then
+                for _,cfg in ipairs(mjrequire(family.configs)) do
+                    mjrequire("common/spDoorUtils").placeholders(self,model,gameObject,cfg)
+                end
+            elseif family.kind == "column" then
                 for _,cfg in ipairs(mjrequire(family.configs)) do
                     mjrequire("common/spColumnUtils").placeholders(self,model,gameObject,cfg)
                 end

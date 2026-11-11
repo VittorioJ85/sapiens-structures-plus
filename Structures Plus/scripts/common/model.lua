@@ -33,6 +33,9 @@ function mod:onload(model)
         -- All providers' onload hooks have run, including later load orders.
         -- Add clones before the engine builds its LOD and renderer tables.
         mjrequire("common/spMaterialCompatibility").prepare(self)
+        mjrequire("common/spDoorUtils").models(self)
+        mjrequire("common/spShapedFoundationUtils").models(self)
+        mjrequire("common/spWindowInsertUtils").models(self)
     end
 end
 return mod

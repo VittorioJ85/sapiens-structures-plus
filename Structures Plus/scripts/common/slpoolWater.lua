@@ -1,12 +1,21 @@
 -- Local kinematic water model. Coordinates/heights are metres in each pool's frame.
 local m=mjrequire "common/mjm"
--- worldHelper is loaded by flora during gameObject initialization. Resolve the
--- object registry only at runtime to avoid a circular module load.
+-- worldHelper loads this module during gameObject initialization. The gameObject
+-- hook supplies its registry later, avoiding circular loads and runtime requires.
 local physics=mjrequire "common/physics"
 local physicsSets=mjrequire "common/physicsSets"
 local validation=mjrequire "common/spValidation"
 local parts=mjrequire "common/slpoolParts"
 local water={time=0,frames=64,period=5.0,rootDepth=1.01}
+local gameObjectRegistry
+
+function water:setGameObjectRegistry(registry)
+    gameObjectRegistry=registry
+end
+
+local function objectTypes()
+    return gameObjectRegistry and gameObjectRegistry.types
+end
 
 function water:setTime(value)
     if validation.isFinite(value) then self.time=value end
@@ -29,7 +38,8 @@ end
 
 function water:size(object)
     if not object then return nil end
-    local types=mjrequire("common/gameObject").types
+    local types=objectTypes()
+    if not types then return nil end
     for _,cfg in ipairs(parts) do
         local objectType=types[cfg.key]
         if objectType and object.objectTypeIndex==objectType.index then return cfg.size end
@@ -41,9 +51,10 @@ function water:isPool(object)
 end
 
 function water:sample(gom,pos,animated,allowSurface)
-    -- worldHelper can call before GOM initialization. Do not resolve gameObject then.
+    -- Early worldHelper calls may precede both GOM and registry initialization.
     if not gom or not validation.validPosition(pos) then return nil end
-    local types=mjrequire("common/gameObject").types
+    local types=objectTypes()
+    if not types then return nil end
     local indexes={}
     for _,cfg in ipairs(parts) do
         local objectType=types[cfg.key]

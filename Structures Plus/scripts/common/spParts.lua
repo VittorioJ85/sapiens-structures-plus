@@ -9,4 +9,7 @@ return {
     {kind="foundation", configs="common/slFoundations", assets="common/slFoundationModels"},
     {kind="pool", configs="common/slpoolParts"},
     {kind="column", configs="common/spColumns"},
+    {kind="door", configs="common/spDoors"},
+    {kind="foundation", configs="common/spShapedFoundations"},
+    {kind="windowInsert", configs="common/spWindowInserts"},
 }

@@ -1,6 +1,8 @@
 local mod = {loadOrder=1}
 
 function mod:onload(gameObject)
+    -- Pass the live module, not a snapshot of types: mjInit populates it later.
+    mjrequire("common/slpoolWater"):setGameObjectRegistry(gameObject)
     local registration = mjrequire "common/spPartRegistration"
     local families = mjrequire "common/spParts"
     local original = gameObject.addGameObjectsFromTable
@@ -25,6 +27,8 @@ function mod:onload(gameObject)
                 end
             end
         end
+        if #mjrequire("common/spDoors")>0 then mjrequire("common/spDoorUtils").attachAnchors(expanded) end
+        mjrequire("common/spWindowInsertUtils").attachAnchors(expanded)
         return original(self, expanded)
     end
 end

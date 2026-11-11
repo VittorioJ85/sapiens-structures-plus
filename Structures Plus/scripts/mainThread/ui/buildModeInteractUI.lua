@@ -9,6 +9,8 @@ function mod:onload(ui)
     local selected
     local show=ui.show
     function ui:show(index,...)
+        -- Also handle old UI selections that bypass the duplication lookup.
+        index=mjrequire("common/spDoorUtils").availableIndex(constructable,index)
         selected=constructable.types[index]
         return show(self,index,...)
     end

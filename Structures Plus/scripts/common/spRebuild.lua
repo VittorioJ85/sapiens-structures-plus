@@ -3,11 +3,17 @@
 local rebuild = {}
 
 function rebuild.groupKey(kind, cfg)
+    if kind=="windowInsert" then return "sp_windowInsert_"..cfg.fit end
     if kind == "column" then
         return cfg.height==1 and "sp_columnHeight1" or "column"
-    elseif kind == "window" then
+    elseif kind == "door" and cfg.standalone then
+        -- Snap IDs use spDoor*, but custom Rebuild groups must use sp_ so
+        -- indexFor can register them rather than treating them as missing native groups.
+        return cfg.radius and ("sp_doorCurve"..cfg.radius) or "sp_doorInsert1x2"
+    elseif kind == "window" or kind == "door" then
         return "wall4x2" -- Native walls, doors and windows share this footprint.
     elseif kind == "foundation" then
+        if cfg.shape then return "sp_foundation_"..cfg.shape..cfg.size.."Depth"..cfg.depth end
         if cfg.ramp then return "sp_ramp4x4Rise1" end
         if cfg.size == 1 or cfg.size == 2 then
             return "foundation" .. cfg.size .. "x" .. cfg.size

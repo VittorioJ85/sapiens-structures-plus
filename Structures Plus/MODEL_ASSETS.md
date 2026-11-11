@@ -9,6 +9,12 @@ preserved. This reduces asset count and package size; it is not an FPS claim.
 
 ## Shared water tiles (0.16.5)
 
+Version 0.20.0 adds 96 logical foundation names using 42 physical GLBs and
+54 additional aliases. The installed mod now has 2,227 physical GLBs and 5,958
+aliases. Assemblies and full/low helper names share independently of material
+content. The new physical assets total 2,397,632 bytes; per-species material
+variants remain runtime aliases. See `SHAPED_FOUNDATIONS.md` for the generator.
+
 The 4 m Water Block uses four native `dirt_1` through `dirt_4` placements of a
 2 m tile. `additionalIndexCount=3` groups these under the first resource, keeping
 the recipe and construction visibility policy unchanged. Every tile receives
@@ -184,3 +190,27 @@ buffer them before writing any shared canonical file. Otherwise later aliases
 can resolve to a partly regenerated mix of authoring and runtime coordinates.
 Normalization hashes for absent physical alias files are obsolete and may be
 pruned; preserve the transforms and flat template mappings for those names.
+
+## Native render roles and curved ends (0.21.2)
+
+Never flatten a native `shadowVolume` node into a visible mesh. The game assigns
+bright red to the Blender `Material` debug material; changing that material is
+not a substitute for retaining the shadow node's render role. Centered-window
+and Hypotenuse baking now preserve separate shadow nodes. Translation sharing
+supports multiple untransformed mesh nodes just as rigid sharing already did.
+
+Clamp both endpoints of the curve subdivision range. A triangle wholly outside
+the nominal wall length still belongs to the first or last strip: native stone
+and brick caps include small overhangs. The data-only repair generator in
+`wall-surface-fix/build.py` reads an immutable source snapshot, preserves existing
+triangles (including the center window pier), adds only omitted native triangles,
+and runs the shared normalization, lossless packing and material consolidation.
+Verification compares ordered attributes and endpoint joins, with runtime and
+native edition checks reported separately from a live renderer test.
+
+The 0.21.3 follow-up applies the same end repair to Mud Brick, Thatch and Split
+Log via `wall-surface-fix/remaining.py`, with its own immutable 0.21.2 snapshot.
+Some native thatch tips include entire connected triangle patches. Join checks
+therefore compare the patch boundary to existing geometry, rather than requiring
+new interior vertices to coincide with old vertices. Existing triangle attributes
+and native shadow-volume node roles remain unchanged.

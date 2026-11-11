@@ -8,12 +8,30 @@ local validation=mjrequire "common/spValidation"
 soil.isFinite=validation.isFinite
 soil.validPosition=validation.validPosition
 function soil:isFoundation(object)
-    local t=mjrequire("common/gameObject").types[self.key]
-    return object and t and object.objectTypeIndex==t.index
+    if not object then return false end
+    local types=mjrequire("common/gameObject").types
+    for _,key in ipairs(self:foundationKeys()) do
+        if types[key] and object.objectTypeIndex==types[key].index then return true end
+    end
+    return false
+end
+function soil:foundationKeys()
+    local keys={self.key}
+    for _,cfg in ipairs(mjrequire "common/spShapedFoundations") do
+        if cfg.family=="dirt" and cfg.size==4 then keys[#keys+1]=cfg.key end
+    end
+    return keys
 end
 function soil:contains(foundation,pos)
     if not foundation or not soil.validPosition(pos) or not foundation.pos or not foundation.rotation then return false end
     local q=m.vec3xMat3(pos-foundation.pos,foundation.rotation)
+    local types=mjrequire("common/gameObject").types
+    for _,cfg in ipairs(mjrequire "common/spShapedFoundations") do
+        if types[cfg.key] and types[cfg.key].index==foundation.objectTypeIndex then
+            return math.abs(mj:pToM(q.y))<=self.heightTolerance
+                and mjrequire("common/spShapedFoundationUtils").contains(cfg,mj:pToM(q.x),mj:pToM(q.z),self.margin)
+        end
+    end
     return math.abs(mj:pToM(q.x))<=2-self.margin and math.abs(mj:pToM(q.z))<=2-self.margin
         and math.abs(mj:pToM(q.y))<=self.heightTolerance
 end

@@ -5,6 +5,9 @@ function mod:onload(animation)
     local init=animation.init
     function animation:init(g,...)
         gom=g
+        -- Client-only pose mapping: preserve the server's custom completion action.
+        local sequence=mjrequire("common/actionSequence").types.spOperateShutters
+        if sequence then sequence.actions={mjrequire("common/action").types.moveTo.index,mjrequire("common/action").types.inspect.index} end
         return init(self,g,...)
     end
     local function apply(sapien,state)

@@ -1,10 +1,306 @@
 # Structures Plus
 
-**Version 0.17.2 - by Vittorio**
+**Version 0.24.2 - by Vittorio**
+
+## Door shadow rendering and thatch fringe (0.24.2)
+
+Door leaves now use the native static construction renderer, including its
+shadow pass. Their registrations update only during movement (at most 30 times
+per second, plus the final pose); resting doors do not rebuild render buffers.
+Material/LOD refreshes restore the current hinge pose, including while paused.
+
+The 2 m Thatch Curved Doorway keeps a 0.30 m band without edge decals around its
+opening. Native thatch decals extend beyond their generating triangles, so a
+mesh-only cut was insufficient. The band uses the native solid thatch material;
+the remaining wall retains its original fringe. No new GLB files are added.
+Both changes still require live visual confirmation after restarting the game.
+
+## Wall surfaces, stacking and insert selection (0.24.0)
+
+Restores native shadow roles on Brick centered/hypotenuse walls and remaining
+Mud Brick hypotenuse walls, removing visible shadow geometry and red debug strips.
+The 2 m Thatch Curved Doorway has a clear, capped hay opening. Automatic wooden
+door leaves now include native shadow-volume geometry, sharing their mesh buffers.
+
+Triangle and quarter-circle foundations have centered top/bottom stack anchors
+for matching shapes and sizes, across material families. Existing edge snaps remain.
+Select a completed wall and choose **Build Door** or **Build Window** to see its
+matching inserts. Doors and windows are no longer listed in the regular Build grid.
+Saved object identifiers, recipes and material choices are retained.
+
+Offline checks passed against both installed game editions. Live rendering,
+moving door shadows and placement still need an in-game acceptance check.
+
+## Remaining curved wall ends (0.21.3)
+
+Restores omitted native end faces for Mud Brick, Thatch and Split Log curved
+walls in both sizes, including full walls, short walls, doorways and windows.
+All original material variants remain available. The 0.21.2 stone/brick and
+window shadow fixes are retained. No new GLB files are needed.
+
+## Wall surface repair (0.21.2)
+
+Mud Brick Centered Window Walls and both Hypotenuse Small Window Wall sizes
+retain native shadow-volume separation, removing visible red debug strips.
+Curved Stone Block and Fired Brick walls now retain their native end faces,
+including both sizes of full walls, short walls, doorways and window walls.
+Existing openings, snap points, recipes and saved object identifiers are unchanged.
+
+## Contextual window selection (0.21.1)
+
+Select one completed window wall and choose **Build Window**. The Build menu
+shows only the four insert styles registered for that exact opening. Choose
+materials, press **E / Build**, then place the insert at the wall's window snap
+point. Closing the menu restores the normal catalogue. Insert selection is only
+offered through supported completed walls.
+
+Shutters require an explicit player command before a Sapien can change their
+saved state. Individual leaf replacements restore the current animated pose,
+including while paused. Old pending shutter jobs without a recorded player
+command should be cancelled and issued again after updating.
+
+## Window inserts (0.21.0)
+
+Select a window wall and choose **Build Window** for Double Wood Shutters, Wood
+Lattice, Vertical Wood Bars or Stone Lattice. The menu selects the matching fit:
+native wide, centered/Hypotenuse small, or the dedicated curved opening.
+The insert material is independent of the host.
+
+Shutters use one Split Log and one Branch; Wood Lattice uses one Branch;
+Vertical Wood Bars use one Split Log; Stone Lattice uses one Stone Block and
+one Branch for its timber surround. Compatible native material choices remain
+available. Stone grilles retain the native stone-building research requirement.
+
+Select completed shutters and choose **Open Shutters** or **Close Shutters**.
+A Sapien receives a normal work plan, approaches the window and operates it.
+The leaves animate after that work completes. The chosen state is saved and
+shared with other players. Plans use native cancellation and prioritization.
+Provide an accessible floor or platform beside a raised window.
+
+Remove an insert before replacing its host wall. Inserts support Rebuild within
+the same opening size. All use `preventGrassAndSnow = false`.
+See [WINDOW_INSERTS.md](WINDOW_INSERTS.md) for maintenance and validation details.
+
+## Client update timer recovery (0.20.5)
+
+Visible sapiens with missing client update timers receive the native initial
+timer values before their normal update. Existing timers and animation state
+are preserved; load callbacks are not replayed. The first recovery is logged
+once per session. This prevents the nil infrequentUpdateTimer arithmetic failure
+reported in 0ffdea; the original source of the incomplete client state is not
+yet established. Server simulation and construction reach are unchanged.
+
+## Construction inventory removal reach (0.20.4)
+
+Removing available building materials during rebuild or deconstruction now uses
+the configured construction reach (5 m in Structures Plus), instead of the
+1.2 m loose-item pickup radius. This covers new and resumed removal suborders
+for in-progress buildings. Native path destinations, proximity modes, inventory
+checks and animations remain in use. Ordinary stockpile pickups, logistics,
+tools and unrelated removal plans retain their original reach. No saved-world
+database rewrite is required.
+
+## Removal routes through multi-storey buildings (0.20.3)
+
+The bounded construction-delivery detour allowance also covers material removal
+at the target of a rebuild or deconstruction plan. A valid partial path can
+continue when stairs temporarily lead away from the destination. Native
+inaccessible results, pickup reach, and the existing repeated-endpoint,
+no-progress and continuation-budget limits remain unchanged. Storage pickups
+and unrelated removal orders retain native behavior.
+
+## Rebuild and deconstruction assignment stability (0.20.2)
+
+An active material-removal suborder keeps its assigned worker when another
+worker is automatically selected merely because it is closer in a straight line.
+This prevents cancellation while the current worker is finding or following a
+route through a multi-storey building. Manual reassignment and native failure,
+cancellation and completion handling remain unchanged. No extra path searches,
+permanent locks or world migrations are introduced. This does not enlarge pickup
+reach or guarantee that a geometrically blocked destination can be reached.
+
+## Construction material reservations (0.20.1)
+
+Construction pickups now use the normal storage concurrency rules when claiming
+their source inventory, consistent with material search and path arrival. The
+construction site remains separately reserved. This avoids rejecting an otherwise
+valid pickup merely because one other builder is using the same storage area.
+Native storage capacity limits still apply; other plan types and logistics are
+unchanged. No additional dependency or saved-world migration is required.
 
 Structures Plus expands building with triangular and curved floors, matching
 walls and openings, foundations, ramps, columns, plantable dirt foundations and
 Water Blocks. Structural parts use original game materials and snap connections.
+
+## Shaped foundations (0.20.0)
+
+Foundation submenus now include 45-degree triangles, right isosceles triangles
+and quarter circles in 2 m and 4 m sizes: 30 parts across Wood, Dirt, Mud Brick,
+Stone Block and Fired Brick. They match the existing floors, extend 2 m below
+the top plane and include upper/lower snapping and native Rebuild. Large Dirt
+shapes also support planting and soil depletion. Material variants share their
+geometry; only 42 additional physical GLBs are needed. See
+[SHAPED_FOUNDATIONS.md](SHAPED_FOUNDATIONS.md) for behavior and maintenance.
+
+## Bent window surfaces (0.23.1)
+
+Curved-window frames, grilles and closed shutter leaves now follow the host
+wall radius instead of spanning a flat chord. Existing saved placements retain
+their origins and snap groups. Shutter hinges and selection/attachment geometry
+follow the bend; left and right leaves use distinct geometry where required.
+
+## Curved window inserts (0.23.0)
+
+Completed Curved Window Walls in both radii and all five wall materials now
+offer **Build Window**. Choose shutters, a wooden lattice, vertical wooden bars
+or a stone lattice for the numbered opening. Each opening has its own measured
+fit and diagonal snap anchors. Multiple windows on a wall are built separately.
+The inserts follow each opening's curved wall surface.
+Wooden shutters are operated manually by Sapiens, as on straight walls.
+Timber/stone variants share geometry; no per-material meshes are added.
+Remove inserts before replacing the host wall.
+
+## Curved door registration fix (0.22.2)
+
+Corrects the custom Rebuild group names for both curved door inserts. The old
+keys were mistakenly treated as missing native groups, interrupting buildable
+registration and leaving the contextual menu empty. Both curved inserts now
+register before the Wood Doors menu is configured. Existing object and model
+identifiers are preserved; no additional models are required.
+
+## Build doors from their host wall (0.22.1)
+
+Select a completed doorway owned by your tribe and choose **Build Door**.
+The build menu shows only its matching automatic wooden insert: the standard
+door for native and Hypotenuse doorways, or the size-specific door for curved
+2 m and 4 m walls. All five wall materials are supported. Choose the timber
+normally, start placement with Build/E and snap the door into the opening.
+This is a menu shortcut, not an automatic placement or a new Sapien work order.
+Closing the menu restores the regular catalogue without standalone insert entries.
+Remove existing inserts before replacing their host wall.
+
+## Automatic doors for curved walls (0.22.0)
+
+**Build Door** on a curved doorway offers its Automatic Wood Door for Curved Walls
+4 m or 2 m insert. Each fits the corresponding completed Thatch, Split Log,
+Mud Brick, Stone Block and Fired Brick curved doorway. The flat wooden leaf
+spans the chord between the curved jambs; select its timber independently.
+Both use the existing proximity-driven opening animation and one split log.
+Distinct snap and Rebuild groups prevent mixing the two opening widths.
+Remove the insert before replacing its wall and leave room for its swing.
+Four additional GLBs provide two widths and their helper assemblies; every
+wood species reuses those meshes through explicit material mappings.
+
+## Automatic doors for Hypotenuse walls (0.19.4)
+
+The **Automatic Wood Door**, selected through **Build Door**, also snaps into
+completed **Hypotenuse Doorways** of both wall lengths, **2.828 m** and
+**5.657 m**, in Thatch, Split Log, Mud Brick, Stone Block and Fired Brick.
+Choose the timber through the normal resource filter, independently of the wall
+material. Existing walls gain the anchors after reloading the world.
+
+The Hypotenuse models preserve their original centered doorway opening, so
+the same door fits both lengths. There are no duplicate menu entries, new GLBs
+or extra material copies. Cost, preview, opening animation and Rebuild remain
+those of the standalone door. Keep space for the swing and remove the door
+before replacing its host wall. Curved doorways use the dedicated inserts above.
+
+## Combined door prototype retired (0.19.3)
+
+**Split Log Wall with Automatic Door** is no longer offered for new construction
+or as a Rebuild target. Use the separate **Automatic Wood Door** in a normal
+doorway instead. Copying an old combined wall selects the native Split Log
+doorway without a door leaf.
+
+Existing combined walls and unfinished orders retain their original definitions,
+models and resource accounting so saved worlds can still load, complete work
+and dismantle them. These compatibility records are intentionally retained;
+the update does not delete or rewrite saved buildings. The separate door and
+the construction improvements from 0.19.1/0.19.2 are unchanged.
+
+## Extended construction reach (0.19.2)
+
+Sets the shared construction goal-proximity distance to 5 metres, twice the
+native 2.5-metre value in Public and Unstable. This applies to native and mod
+building parts, material delivery and other actions using the same construction
+constant. Ordinary movement proximity and path search limits are unchanged.
+Existing collision and reachability rules still apply; this does not guarantee
+five metres of vertical reach. Workers may visibly build from farther away.
+Reload the world after updating. Already queued paths may retain their previous
+distance until a new order/path is created.
+
+## Construction detours (0.19.1)
+
+Construction-material deliveries may continue along valid partial routes that
+temporarily lead away from the destination, such as central stairs in tall
+buildings. This includes native building parts. No separate Construction Detours
+mod is required. Disable that standalone mod to use the embedded implementation;
+if it remains enabled, Structures Plus defers to it to avoid duplicate patches.
+See [Construction detours](docs/CONSTRUCTION_DETOURS.md) for limits and diagnostics.
+
+## Separate automatic wooden door (0.19.0)
+
+Choose **Build Door** on a completed doorway. The insert costs one split
+log and snaps into completed, straight native Thatch, Split Log, Mud Brick,
+Stone Block and Fired Brick doorways. Existing doorway walls gain the centered
+snap anchors after reloading; they do not need to be rebuilt. Select the timber
+species through the normal resource filter. Compatible foreign timber also works.
+
+The separate leaf opens near Sapiens on either side and closes after they leave,
+using the same dynamic rendering correction as the combined doorway below.
+The original combined prototype was retired from new construction in 0.19.3.
+Both parts retain native delivery, dismantling, refunds and Rebuild behavior;
+the insert has its own Rebuild group so it cannot become a full wall.
+
+Leave room for the swing. Remove an insert before dismantling or replacing its
+host wall: snapping does not create a persistent parent-child attachment.
+Curved openings use their own size-specific anchors and inserts.
+Doors are visual and permanently passable, without locking or room sealing.
+One additional helper GLB reuses the existing leaf; no new texture or
+per-species geometry files are added. `preventGrassAndSnow` stays false.
+
+Restart Sapiens after updating. Offline tests cover Beta and Public separately;
+live rendering, snapping and construction still require an in-game playtest.
+
+## Automatic door rendering correction (0.18.1)
+
+The completed wooden door leaf now uses the native dynamic render path.
+Previously the native construction renderer registered it as static, so the
+proximity logic could update its hinge without visible movement in the game.
+The dynamic registration is reapplied after native material/LOD refreshes and
+its override is released when the object changes type. Existing doors receive
+the correction after reloading the world; rebuilding them is not required.
+The 0.18.1 correction changed no models, recipes, snap points or saved identifiers.
+Offline tests cover dynamic registration; live rendering needs confirmation.
+
+## Automatic wooden door prototype (0.18.0)
+
+Historical feature, retired from the build menu in 0.19.3:
+**Split Log Wall with Automatic Door**.
+This is a complete straight 4 x 2 m doorway wall with a wooden leaf. Existing
+doorway models remain unchanged. The native wall recipe gains one split log for the
+leaf (2 logs and 7 split logs in total); delivery, construction, dismantling,
+refunds, snap points and the wall's Rebuild group use the normal game systems.
+The leaf follows its delivered timber's material, including compatible timber
+providers discovered through the existing material adapter.
+
+The door opens when a Sapien approaches either side. It swings away from the
+nearest approach and retains that direction until closed. After the approach
+area is empty for 1.25 simulation seconds, it closes; a new occupant interrupts
+closing. Animation respects pause and game speed. A streamed-in door opens
+immediately if a Sapien is already nearby. Native material/LOD refreshes retain
+the current hinge pose.
+
+This first prototype animates the leaf over the native navigable opening. It
+does **not** lock, block enemies, change room sealing, or add a moving physical
+obstacle to the path network. Nearness is checked in the doorway's local frame;
+it does not inspect a Sapien's intended route. Leave room for the leaf to swing.
+Curved doorways and other wall materials are not part of this initial prototype.
+
+Only two GLBs are added: a native-derived helper assembly and one shared leaf
+mesh. Animation uses submodel transforms; there are no per-frame meshes or
+per-species geometry copies. See [automatic door maintenance](docs/automatic-doors.md)
+for implementation boundaries, reproducible tooling and playtest requirements.
 
 ## Construction access correction (0.17.2)
 
@@ -229,3 +525,11 @@ Offline checks use the game's Lua 5.1 runtime: script syntax, material mappings 
 These checks do not replace testing in the running game. Check world loading, existing and new pools, swimming, menu previews, planting, construction, ramp traversal, snapping and save/reload after updating. Registration snapshots compare the merged mod with the original Structures Plus baseline plus standalone Pool Prototype; historical pool labels and menu layout are normalized for that comparison. A separate check exercises the current menu groups and previews through native finalize/build UI functions.
 
 The migration creates `backups/StructuresPlus-pool-merge-<timestamp>` in the workspace. For rollback with Sapiens closed, replace the merged installed folder with the saved `Structures Plus` folder, restore the archived `PoolPrototype` folder to `mods`, and restore the backed-up world `config.lua` files to their matching player/world paths. Restore all three together; do not leave both pool implementations active.
+
+Shutter radial actions require a full mouse click on the action, rather than a
+release-only quick swipe. Native controller actions remain available. Native
+quick-swipe dispatch was verified in both game editions; whether it caused the
+reported intermittent opening still needs an in-game check.
+
+All ramp foundations have native male and female corner connectors at all six wedge vertices, including the two bottom corners beneath the high end. This applies to every ramp material and supported rise; existing slope connectors and placement origins are preserved.
+

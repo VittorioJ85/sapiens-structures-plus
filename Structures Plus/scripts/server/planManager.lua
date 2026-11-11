@@ -1,5 +1,6 @@
 local mod={loadOrder=70}
 function mod:onload(manager)
+    mjrequire("common/spShutters").installPlans(manager)
     local soil=mjrequire "common/spSoil"
     local service=mjrequire "server/spSoilServer"
     local add=manager.addBuildOrPlantPlan

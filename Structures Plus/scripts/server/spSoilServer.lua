@@ -3,9 +3,12 @@ local service={}
 function service:find(gom,pos)
     if not soil.validPosition(pos) then return nil end
     local go=mjrequire "common/gameObject"
-    local t=go.types[soil.key]
-    if not t then return nil end
-    for _,id in ipairs(gom:getGameObjectsOfTypesWithinRadiusOfPos({t.index},pos,mj:mToP(4)) or {}) do
+    local indexes={}
+    for _,key in ipairs(soil:foundationKeys()) do
+        if go.types[key] then indexes[#indexes+1]=go.types[key].index end
+    end
+    if #indexes==0 then return nil end
+    for _,id in ipairs(gom:getGameObjectsOfTypesWithinRadiusOfPos(indexes,pos,mj:mToP(4)) or {}) do
         local object=gom:getObjectWithID(id)
         if soil:isFoundation(object) and soil:contains(object,pos) then
             gom:ensureSharedStateLoaded(object)

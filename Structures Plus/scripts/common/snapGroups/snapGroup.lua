@@ -148,5 +148,8 @@ function mod:onload(snap)
     addCurves(snap)
     addRightTriangles(snap)
     addHypotenuseWalls(snap)
+    mjrequire("common/spDoorUtils").addSnaps(snap)
+    mjrequire("common/spWindowInsertUtils").addSnaps(snap)
+    mjrequire("common/spShapedFoundationUtils").addStackGroups(snap)
 end
 return mod

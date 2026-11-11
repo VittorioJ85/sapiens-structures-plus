@@ -8,6 +8,7 @@ menu.groups = {
         members={"spf_wood_2", "spf_wood_1", "spf_wood_4", "spf_wood_ramp4"}},
     {label="Wood Columns",root="spc_wood",members={"spc_wood","spc_cap_wood"}},
     {label="Fired Brick Columns",root="spc_brick",members={"spc_brick","spc_cap_brick"}},
+    {label="Wood Doors",root="spDoorWoodInsert",contextOnly=true,members={"spDoorWoodInsert","spDoorCurve4","spDoorCurve2"}},
 }
 -- Extend native column submenus without adding duplicate main entries or
 -- discarding variants supplied by the game or other mods.
@@ -24,6 +25,20 @@ end
 
 function menu.configure(constructable)
     local types = constructable.types
+    if not menu.windowGroup then
+        local members={}
+        for _,cfg in ipairs(mjrequire "common/spWindowInserts") do members[#members+1]=cfg.key end
+        if #members>0 then
+            menu.windowGroup={label="Window Inserts",root=members[1],members=members,contextOnly=true}
+            menu.groups[#menu.groups+1]=menu.windowGroup
+        end
+    end
+    -- Append generated timber footprints to the existing wood submenu.
+    for _,cfg in ipairs(mjrequire "common/spShapedFoundations") do
+        if cfg.family=="wood" and types[cfg.key] and not position(menu.groups[2].members,cfg.key) then
+            table.insert(menu.groups[2].members,cfg.key)
+        end
+    end
     for _, group in ipairs(menu.groups) do
         local root = types[group.root]
         if root then
@@ -70,13 +85,20 @@ end
 
 function menu.addMainEntries(itemList, constructable)
     local types = constructable.types
+    local hidden={}
+    for _,group in ipairs(menu.groups) do
+        if group.contextOnly then for _,key in ipairs(group.members) do
+            if types[key] then hidden[types[key].index]=true end
+        end end
+    end
+    for i=#itemList,1,-1 do if hidden[itemList[i]] then table.remove(itemList,i) end end
     local anchor = types.dirtFoundation2x2
     local insertAt = anchor and position(itemList, anchor.index)
     -- A filtered menu (for example Blueprints Only) must not gain normal buildings.
     if not insertAt then return end
     for _, group in ipairs(menu.groups) do
         local root = types[group.root]
-        if root then
+        if root and not group.contextOnly then
             local existing = position(itemList, root.index)
             if existing then
                 insertAt = existing

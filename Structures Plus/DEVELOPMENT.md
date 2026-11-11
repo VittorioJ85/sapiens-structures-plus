@@ -8,6 +8,11 @@ The authoring directory is `Structures Plus`, matching the installed mod folder.
 
 ## Runtime architecture
 
+Version 0.20.0 adds shaped foundations through the appended
+`spShapedFoundations` configuration family and `spShapedFoundationUtils` helper.
+See [SHAPED_FOUNDATIONS.md](SHAPED_FOUNDATIONS.md) for generation, material
+sharing, collision approximations, planting and verification contracts.
+
 Version 0.16.0 consolidates identical GLB geometry through stable model aliases.
 Version 0.16.1 adds static resource-node translations; 0.16.2 also supports
 proper rotations, per-logical-model constraints and exact shadow-node preservation.
@@ -142,6 +147,14 @@ The native main menu is an explicit list. The buildUI hook chains `createItemLis
 Compatibility is geometry-based and independent of menu groups or material families. Standard straight windows use `wall4x2`; 1x1 and 2x2 wooden foundations use native foundation groups. All other shapes have namespaced groups separated by size and height. Water Blocks have separate groups per size. Native finalization builds `typesByRebuildGroup`, so no Rebuild-panel patch is needed.
 
 The native Rebuild queue and construction pipeline handle resources, tools, research, deconstruction and object replacement. The soil plan-helper hook supplies the same occupied-foundation reason for both removal and Rebuild, matching the existing server guard. Preserve that guard when adding further foundation types.
+
+## Window inserts (0.21.0)
+
+See `WINDOW_INSERTS.md` for the four insert designs, native plan-based shutter
+operation, shared asset pipeline and validation. Maintained tools are in
+`window-insert-tests`. This family is appended to `spParts`; preserve its object,
+snap, plan, order and action identifiers in future releases. Reuse native work
+plans for explicit player orders instead of scanning for nearby Sapiens.
 
 ## Surface datum (0.12.1)
 

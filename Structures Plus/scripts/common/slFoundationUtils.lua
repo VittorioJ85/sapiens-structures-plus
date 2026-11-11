@@ -5,6 +5,7 @@
 -- walls use the same zero datum, and saved placements must not be shifted.
 local utils={}
 function utils.points(cfg,male)
+ if cfg.shape then return mjrequire("common/spShapedFoundationUtils").points(cfg,male) end
  local snap=mjrequire "common/snapGroups/snapGroup"
  local copy=mjrequire("common/sl45Util").copy
  local finish=mjrequire("common/sl90Utils").finish
@@ -23,6 +24,18 @@ function utils.points(cfg,male)
   if not cfg.ramp or math.abs(p.point.z)>1.99 then
    if cfg.ramp then p.point=vec3(p.point.x,(p.point.z+2)/4,p.point.z) end
    table.insert(result,p)
+  end
+ end
+ if cfg.ramp then
+  -- The wedge has six corners: four on the slope and two below its high end.
+  -- Reuse native corner groups/normals at those two lower corners; the toe
+  -- already lies at Y=0 and must not receive a second copy of its connectors.
+  for _,p in ipairs(copy(base)) do
+   if math.abs(p.point.x)==cfg.size/2 and p.point.z==cfg.size/2 then
+    p.point=vec3(p.point.x,0,p.point.z)
+    p.heuristicOffset=nil
+    table.insert(result,p)
+   end
   end
  end
  if cfg.size==4 and not cfg.ramp then

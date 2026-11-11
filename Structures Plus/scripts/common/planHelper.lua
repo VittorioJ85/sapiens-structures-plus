@@ -1,5 +1,10 @@
 local mod={loadOrder=70}
 function mod:onload(helper)
+    local available=helper.availablePlansForObjectInfos
+    function helper:availablePlansForObjectInfos(base,objects,tribe,...)
+        local plans=mjrequire("common/spShutters").menu(self,available(self,base,objects,tribe,...),objects,tribe)
+        return mjrequire("common/spWindowContext").menu(self,plans,objects,tribe)
+    end
     -- Both operations remove the growing medium. Match the server's existing guard
     -- while retaining native queued-order checks and availability calculations.
     for _,name in ipairs({"getDeconstructionPlanInfo", "getRebuildPlanInfo"}) do

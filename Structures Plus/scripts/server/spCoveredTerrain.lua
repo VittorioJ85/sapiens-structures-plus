@@ -2,7 +2,10 @@
 -- footprint. Do not demand access to grass buried under an existing solid block.
 local m = mjrequire "common/mjm"
 local validation = mjrequire "common/spValidation"
-local configs = mjrequire "common/slFoundations"
+local configs = {}
+for _,module in ipairs({"common/slFoundations","common/spShapedFoundations"}) do
+    for _,cfg in ipairs(mjrequire(module)) do configs[#configs+1]=cfg end
+end
 local covered = {}
 
 function covered:foundationAt(gom, pos)
@@ -15,7 +18,7 @@ function covered:foundationAt(gom, pos)
         local objectType = types[cfg.key]
         if cfg.size == 4 and cfg.depth == 2 and not cfg.ramp and not cfg.woodShell and objectType then
             indexes[#indexes + 1] = objectType.index
-            eligible[objectType.index] = true
+            eligible[objectType.index] = cfg
         end
     end
     if #indexes == 0 then return nil end
@@ -30,7 +33,11 @@ function covered:foundationAt(gom, pos)
             -- Keep deck vegetation native. The 5 cm base tolerance
             -- covers placement offsets (the reproduced base is 1.05 cm up).
             -- Suspended blocks with a larger gap must not suppress clearance.
-            if math.abs(x) < 1.999 and math.abs(z) < 1.999 and y >= -2.05 and y <= -0.25 then
+            local cfg=eligible[object.objectTypeIndex]
+            local inside
+            if cfg.shape then inside=mjrequire("common/spShapedFoundationUtils").contains(cfg,x,z,.001)
+            else inside=math.abs(x)<1.999 and math.abs(z)<1.999 end
+            if inside and y >= -2.05 and y <= -0.25 then
                 return object
             end
         end
